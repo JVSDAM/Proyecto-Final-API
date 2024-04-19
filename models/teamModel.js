@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 const teamModel = new mongoose.Schema(
     {
-        name: {type: String, required: true},
-        description: {type: String},
-        tournaments_id: {},
-        admin_id: {}
+        image: { type: String, default: "https://cdn-icons-png.freepik.com/256/1144/1144760.png?ga=GA1.1.750678514.1713177235&" },
+        name: { type: String, required: true },
+        description: { type: String },
+        players_id: [ String ],
+        tournaments_id: [ String ],
+        admin_id: { type: String, required: true }
     },
     {
         timestamps: true,

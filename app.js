@@ -19,63 +19,61 @@ router.post("/players", async (req, res) => {
 
 //Get players
 router.get("/players", async (req, res) => {
-    /*var array = []
-    const respuesta = await ModelPlayer.find({})
-    for(var e of respuesta){
-        array.push(e)
-    }
-    res.send(array)*/
-
-    const respuesta = await ModelPlayer.find({})
-    res.send(respuesta)
+    const results = await ModelPlayer.find({})
+    res.send({ results })
 })
 
-//Get players por nombre o id
+//Get players por id
 router.get("/players/:par", async (req, res) => {
     const par = req.params.par;
-    var respuesta = ""
-    if (par.length == 24) {
-        respuesta = await ModelPlayer.findById(par)
+    var results = ""
 
-    } else {
-        //respuesta = await ModelPlayer.findOne({ name: {$eq: par}})
+    results = await ModelPlayer.find({ name: { $regex: par } })
 
-        respuesta = await ModelPlayer.find({ name: { $regex: par } })
-    }
-    res.send(respuesta)
+    res.send({ results })
 })
 
-//Get players por nombre contains par
-/*router.get("/players/:par", async (req, res) => {
+//Get teams por id
+router.get("/players/id/:par", async (req, res) => {
     const par = req.params.par;
-    var respuesta = await ModelPlayer.find({name : {$regex : par}})
-    
-    res.send(respuesta)
-})*/
+    var results = ""
+
+    results = await ModelPlayer.findById(par)
+
+    res.send(results)//Esto tiene que estar sin corchetes porque findById SOLO devuelve un objeto, NUNCA una lista
+})
+
+//Get players por email
+router.get("/players/email/:par", async (req, res) => {
+    const par = req.params.par;
+    var results = await ModelPlayer.find({ email: { $eq: par } })
+
+    res.send({ results })
+})
 
 //Put players por nombre o id
 router.put("/players/:par", async (req, res) => {
     const par = req.params.par;
 
     if (par.length == 24) {
-        const respuesta = await ModelPlayer.findByIdAndUpdate(par, req.body)
-        res.send(respuesta)
+        const results = await ModelPlayer.findByIdAndUpdate(par, req.body)
+        res.send({ results })
     } else {
-        const respuesta = await ModelPlayer.findOneAndUpdate({ name: { $eq: par } }, req.body)
-        res.send(respuesta)
+        const results = await ModelPlayer.findOneAndUpdate({ name: { $eq: par } }, req.body)
+        res.send({ results })
     }
 })
 
-//Delete teams por nombre o id
+//Delete players por nombre o id
 router.delete("/players/:par", async (req, res) => {
     const par = req.params.par;
-
+    
     if (par.length == 24) {
-        const respuesta = await ModelPlayer.deleteOne(par)
-        res.send(respuesta)
+        const results = await ModelPlayer.findByIdAndDelete({_id: par})
+        res.send({ results })
     } else {
-        const respuesta = await ModelPlayer.deleteOne({ name: { $eq: par } })
-        res.send(respuesta)
+        const results = await ModelPlayer.deleteOne({ name: { $eq: par } })
+        res.send({ results })
     }
 })
 
@@ -83,27 +81,34 @@ router.delete("/players/:par", async (req, res) => {
 //------------------------------------------------------------------ TEAMS ------------------------------------------------------------------
 //Post teams
 router.post("/teams", async (req, res) => {
-    const respuesta = await ModelTeam.create(req.body)
-    res.send(respuesta)
+    const results = await ModelTeam.create(req.body)
+    res.send({ results })
 })
 
 //Get teams
 router.get("/teams", async (req, res) => {
 
-    var respuesta = await ModelTeam.find({})
-    res.send(respuesta)
+    var results = await ModelTeam.find({})
+    res.send({ results })
 })
 
-//Get teams por nombre o id
+//Get teams por nombre
 router.get("/teams/:par", async (req, res) => {
     const par = req.params.par;
-    if (par.length == 24) {
-        const respuesta = await ModelTeam.findById(par)
-        res.send(respuesta)
-    } {
-        const respuesta = await ModelTeam.findOne({ name: { $eq: par } })
-        res.send(respuesta)
-    }
+    var results = ""
+
+    results = await ModelTeam.find({ name: { $regex: par } })
+
+    res.send({ results })
+})
+
+//Get teams por id
+router.get("/teams/id/:par", async (req, res) => {
+    const par = req.params.par;
+
+    results = await ModelTeam.findById(par)
+
+    res.send(results)
 })
 
 //Put teams por nombre o id
@@ -111,11 +116,11 @@ router.put("/teams/:par", async (req, res) => {
     const par = req.params.par;
 
     if (par.length == 24) {
-        const respuesta = await ModelTeam.findByIdAndUpdate(par, req.body)
-        res.send(respuesta)
+        const results = await ModelTeam.findByIdAndUpdate(par, req.body)
+        res.send({ results })
     } else {
-        const respuesta = await ModelTeam.findOneAndUpdate({ name: { $eq: par } }, req.body)
-        res.send(respuesta)
+        const results = await ModelTeam.findOneAndUpdate({ name: { $eq: par } }, req.body)
+        res.send({ results })
     }
 })
 
