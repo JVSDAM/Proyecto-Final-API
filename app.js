@@ -141,26 +141,34 @@ router.delete("/teams/:par", async (req, res) => {
 //------------------------------------------------------------------ TOURNAMENTS ------------------------------------------------------------------
 //Post tournaments
 router.post("/tournaments", async (req, res) => {
-    const respuesta = await ModelTournament.create(req.body)
-    res.send(respuesta)
+    const results = await ModelTournament.create(req.body)
+    res.send({ results })
 })
 
-//Get tournaments
+//Get players
 router.get("/tournaments", async (req, res) => {
-    const respuesta = await ModelTournament.find({})
-    res.send(respuesta)
+    const results = await ModelTournament.find({})
+    res.send({ results })
 })
 
-//Get tournaments por nombre o id
+//Get players por id
 router.get("/tournaments/:par", async (req, res) => {
     const par = req.params.par;
-    if (par.length == 24) {
-        const respuesta = await ModelTournament.findById(par)
-        res.send(respuesta)
-    } {
-        const respuesta = await ModelTournament.findOne({ name: { $eq: par } })
-        res.send(respuesta)
-    }
+    var results = ""
+
+    results = await ModelTournament.find({ name: { $regex: par } })
+
+    res.send({ results })
+})
+
+//Get tournaments por id
+router.get("/tournaments/id/:par", async (req, res) => {
+    const par = req.params.par;
+    var results = ""
+
+    results = await ModelTournament.findById(par)
+
+    res.send(results)//Esto tiene que estar sin corchetes porque findById SOLO devuelve un objeto, NUNCA una lista
 })
 
 //Put tournaments por nombre o id
