@@ -5,7 +5,8 @@ const dbconnect = require('./config')
 const ModelPlayer = require('./models/playerModel')
 const ModelTeam = require('./models/teamModel')
 const ModelTournament = require('./models/tournamentModel')
-const ModelMatch = require('./models/matchModel')
+const ModelInscription = require('./models/inscriptionModel')
+const ModelInvite = require('./models/inviteModel')
 const app = express()
 
 const router = express.Router()
@@ -13,8 +14,8 @@ const router = express.Router()
 //------------------------------------------------------------------ PLAYERS ------------------------------------------------------------------
 //Post players
 router.post("/players", async (req, res) => {
-    const respuesta = await ModelPlayer.create(req.body)
-    res.send(respuesta)
+    const results = await ModelPlayer.create(req.body)
+    res.send(results)
 })
 
 //Get players
@@ -23,7 +24,7 @@ router.get("/players", async (req, res) => {
     res.send({ results })
 })
 
-//Get players por id
+//Get players por nombre
 router.get("/players/:par", async (req, res) => {
     const par = req.params.par;
     var results = ""
@@ -51,30 +52,26 @@ router.get("/players/email/:par", async (req, res) => {
     res.send({ results })
 })
 
-//Put players por nombre o id
-router.put("/players/:par", async (req, res) => {
+//Get players por team_id
+router.get("/players/team/:par", async (req, res) => {
     const par = req.params.par;
+    var results = await ModelPlayer.find({ team_id: { $eq: par } })
 
-    if (par.length == 24) {
-        const results = await ModelPlayer.findByIdAndUpdate(par, req.body)
-        res.send({ results })
-    } else {
-        const results = await ModelPlayer.findOneAndUpdate({ name: { $eq: par } }, req.body)
-        res.send({ results })
-    }
+    res.send({ results })
 })
 
-//Delete players por nombre o id
-router.delete("/players/:par", async (req, res) => {
+//Put players por nombre o id
+router.put("/players/id/:par", async (req, res) => {
     const par = req.params.par;
-    
-    if (par.length == 24) {
-        const results = await ModelPlayer.findByIdAndDelete({_id: par})
-        res.send({ results })
-    } else {
-        const results = await ModelPlayer.deleteOne({ name: { $eq: par } })
-        res.send({ results })
-    }
+    const results = await ModelPlayer.findByIdAndUpdate(par, req.body)
+    res.send({ results })
+})
+
+//Delete players por id
+router.delete("/players/id/:par", async (req, res) => {
+    const par = req.params.par;
+    const results = await ModelPlayer.findByIdAndDelete({_id: par})
+    res.send({ results })
 })
 
 
@@ -82,7 +79,7 @@ router.delete("/players/:par", async (req, res) => {
 //Post teams
 router.post("/teams", async (req, res) => {
     const results = await ModelTeam.create(req.body)
-    res.send({ results })
+    res.send( results )
 })
 
 //Get teams
@@ -111,30 +108,18 @@ router.get("/teams/id/:par", async (req, res) => {
     res.send(results)
 })
 
-//Put teams por nombre o id
-router.put("/teams/:par", async (req, res) => {
+//Put teams por id
+router.put("/teams/id/:par", async (req, res) => {
     const par = req.params.par;
-
-    if (par.length == 24) {
-        const results = await ModelTeam.findByIdAndUpdate(par, req.body)
-        res.send({ results })
-    } else {
-        const results = await ModelTeam.findOneAndUpdate({ name: { $eq: par } }, req.body)
-        res.send({ results })
-    }
+    const results = await ModelTeam.findByIdAndUpdate(par, req.body)
+    res.send({ results })
 })
 
-//Delete teams por nombre o id
-router.delete("/teams/:par", async (req, res) => {
+//Delete teams por id
+router.delete("/teams/id/:par", async (req, res) => {
     const par = req.params.par;
-
-    if (par.length == 24) {
-        const respuesta = await ModelTeam.deleteOne(par)
-        res.send(respuesta)
-    } else {
-        const respuesta = await ModelTeam.deleteOne({ name: { $eq: par } })
-        res.send(respuesta)
-    }
+    const results = await ModelTeam.findByIdAndDelete({_id: par})
+    res.send( results )
 })
 
 
@@ -142,16 +127,16 @@ router.delete("/teams/:par", async (req, res) => {
 //Post tournaments
 router.post("/tournaments", async (req, res) => {
     const results = await ModelTournament.create(req.body)
-    res.send({ results })
+    res.send( results )
 })
 
-//Get players
+//Get tournaments
 router.get("/tournaments", async (req, res) => {
     const results = await ModelTournament.find({})
     res.send({ results })
 })
 
-//Get players por id
+//Get tournaments por nombre
 router.get("/tournaments/:par", async (req, res) => {
     const par = req.params.par;
     var results = ""
@@ -171,84 +156,77 @@ router.get("/tournaments/id/:par", async (req, res) => {
     res.send(results)//Esto tiene que estar sin corchetes porque findById SOLO devuelve un objeto, NUNCA una lista
 })
 
-//Put tournaments por nombre o id
-router.put("/tournaments/:par", async (req, res) => {
+//Put tournaments por id
+router.put("/tournaments/id/:par", async (req, res) => {
     const par = req.params.par;
-
-    if (par.length == 24) {
-        const respuesta = await ModelTournament.findByIdAndUpdate(par, req.body)
-        res.send(respuesta)
-    } else {
-        const respuesta = await ModelTournament.findOneAndUpdate({ name: { $eq: par } }, req.body)
-        res.send(respuesta)
-    }
+    const results = await ModelTournament.findByIdAndUpdate(par, req.body)
+    res.send({ results })
 })
 
-//Delete tournaments por nombre o id
-router.delete("/tournaments/:par", async (req, res) => {
+//Delete tournaments por id
+router.delete("/tournaments/id/:par", async (req, res) => {
     const par = req.params.par;
-
-    if (par.length == 24) {
-        const respuesta = await ModelTournament.deleteOne(par)
-        res.send(respuesta)
-    } else {
-        const respuesta = await ModelTournament.deleteOne({ name: { $eq: par } })
-        res.send(respuesta)
-    }
+    const results = await ModelTournament.findByIdAndDelete({_id: par})
+    res.send( results )
 })
 
-//------------------------------------------------------------------ MATCHES ------------------------------------------------------------------
-//Post matches
-router.post("/matches", async (req, res) => {
-    const respuesta = await ModelMatch.create(req.body)
-    res.send(respuesta)
+//------------------------------------------------------------------ INSCRIPTIONS ------------------------------------------------------------------
+//Post inscriptions
+router.post("/inscriptions", async (req, res) => {
+    const results = await ModelInscription.create(req.body)
+    res.send(results)
 })
 
-//Get matches
-router.get("/matches", async (req, res) => {
-    const respuesta = await ModelMatch.find({})
-    res.send(respuesta)
+//Get inscriptions
+router.get("/inscriptions", async (req, res) => {
+    const results = await ModelInscription.find({})
+    res.send(results)
 })
 
-//Get matches por id propia o de uno de los equipos
-router.get("/matches/:par", async (req, res) => {
+//Get inscriptions por id propia
+router.get("/inscriptions/id/:par", async (req, res) => {
     const par = req.params.par;
-    if (par.length == 24) {
-        const respuesta = await ModelMatch.findById(par)
+    var results = ""
 
-        if (respuesta == null) {//respuesta esta sin inicializar aqui asi que esta forma de hacerlo no funciona
-            console.log("Cuasi res para el cos")
-            const respuesta = await ModelMatch.find({ team1_id: { $eq: par } })
-            console.log("Cuasi res para el cos1")
+    results = await ModelInscription.findById(par)
 
-            if (respuesta == null) {
-                const respuesta = await ModelMatch.find({ team2_id: { $eq: par } })
-                console.log("Cuasi res para el cos2")
-            }
-        }
-        res.send(respuesta)
-    }
+    res.send(results)//Esto tiene que estar sin corchetes porque findById SOLO devuelve un objeto, NUNCA una lista
 })
 
-//Put matches por id propia
-router.put("/matches/:par", async (req, res) => {
+//Get inscriptions por id del torneo
+router.get("/inscriptions/tournament/:par", async (req, res) => {
     const par = req.params.par;
-    const respuesta = await ModelMatch.findByIdAndUpdate(par, req.body)
-    res.send(respuesta)
+    var results = ""
+
+    results = await ModelInscription.find({ tournament_id: { $eq: par } })
+
+    res.send({ results })
 })
 
-//Delete matches por nombre o id
-router.delete("/matches/:par", async (req, res) => {
+//Get inscriptions por id del equipo
+router.get("/inscriptions/team/:par", async (req, res) => {
     const par = req.params.par;
+    var results = ""
 
-    if (par.length == 24) {
-        const respuesta = await ModelMatch.deleteOne(par)
-        res.send(respuesta)
-    } else {
-        const respuesta = await ModelMatch.deleteOne({ name: { $eq: par } })
-        res.send(respuesta)
-    }
+    results = await ModelInscription.find({ team_id: { $eq: par } })
+
+    res.send({ results })
 })
+
+//Put inscriptions por id propia
+router.put("/inscriptions/id/:par", async (req, res) => {
+    const par = req.params.par;
+    const results = await ModelInscription.findByIdAndUpdate(par, req.body)
+    res.send(results)
+})
+
+//Delete inscriptions por nombre o id
+router.delete("/inscriptions/id/:par", async (req, res) => {
+    const par = req.params.par;
+    const results = await ModelInscription.findByIdAndDelete(par)
+    res.send(results)
+})
+
 
 /*app.use(multer({dest: './uploads/',
     rename: function (fieldname, filename){
