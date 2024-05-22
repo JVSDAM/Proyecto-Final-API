@@ -4,8 +4,13 @@ const router = express.Router()
 
 //Post inscriptions
 router.post("/inscriptions", async (req, res) => {
-    const results = await ModelInscription.create(req.body)
-    res.send(results)
+    try {
+        const results = await ModelInscription.create(req.body)
+        res.send(results)
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Hubo un error al crear la inscripción');
+    }
 })
 
 //Get inscriptions
@@ -51,7 +56,7 @@ router.put("/inscriptions/id/:par", async (req, res) => {
     res.send(results)
 })
 
-//Delete inscriptions por nombre o id
+//Delete inscriptions por id
 router.delete("/inscriptions/id/:par", async (req, res) => {
     const par = req.params.par;
     const results = await ModelInscription.findByIdAndDelete(par)

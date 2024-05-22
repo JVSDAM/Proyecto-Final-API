@@ -51,7 +51,7 @@ router.get("/players/team/:par", async (req, res) => {
     res.send({ results })
 })
 
-//Put players por nombre o id
+//Put players por id
 router.put("/players/id/:par", async (req, res) => {
     const par = req.params.par;
     const results = await ModelPlayer.findByIdAndUpdate(par, req.body)

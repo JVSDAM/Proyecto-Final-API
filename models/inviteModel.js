@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const inviteModel = new mongoose.Schema(
     {
-        team_id: {},
-        player_id: {}
+        team_id: { type: String, required: true  },
+        player_id: { type: String, required: true  }
     },
     {
         timestamps: true,

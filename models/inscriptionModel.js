@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const inscriptionModel = new mongoose.Schema(
     {
-        team_id: {},
-        tournament_id: {}
+        team_id: { type: String, required: true },
+        tournament_id: { type: String, required: true }
     },
     {
         timestamps: true,
