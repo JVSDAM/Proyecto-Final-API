@@ -15,52 +15,91 @@ router.post("/inscriptions", async (req, res) => {
 
 //Get inscriptions
 router.get("/inscriptions", async (req, res) => {
-    const results = await ModelInscription.find({})
-    res.send(results)
+    try {
+        const results = await ModelInscription.find({})
+        if (!results) {
+            return res.status(404).send({ message: "Not Found" })
+        }
+        res.send({ results })
+    } catch (error) {
+        res.status(500).send({ message: "Internal Error", error: error.message })
+    }
 })
 
 //Get inscriptions por id propia
 router.get("/inscriptions/id/:par", async (req, res) => {
     const par = req.params.par;
-    var results = ""
 
-    results = await ModelInscription.findById(par)
-
-    res.send(results)//Esto tiene que estar sin corchetes porque findById SOLO devuelve un objeto, NUNCA una lista
+    try {
+        const results = await ModelInscription.findById(par)
+        if (!results) {
+            return res.status(404).send({ message: "Not Found" })
+        }
+        res.send(results)
+    } catch (error) {
+        res.status(500).send({ message: "Internal Error", error: error.message })
+    }
 })
 
 //Get inscriptions por id del torneo
 router.get("/inscriptions/tournament/:par", async (req, res) => {
     const par = req.params.par;
-    var results = ""
-
-    results = await ModelInscription.find({ tournament_id: { $eq: par } })
 
     res.send({ results })
+    try {
+        const results = await ModelInscription.find({ tournament_id: { $eq: par } })
+        if (!results) {
+            return res.status(404).send({ message: "Not Found" })
+        }
+        res.send({ results })
+    } catch (error) {
+        res.status(500).send({ message: "Internal Error", error: error.message })
+    }
 })
 
 //Get inscriptions por id del equipo
 router.get("/inscriptions/team/:par", async (req, res) => {
     const par = req.params.par;
-    var results = ""
 
-    results = await ModelInscription.find({ team_id: { $eq: par } })
-
-    res.send({ results })
+    try {
+        const results = await ModelInscription.find({ team_id: { $eq: par } })
+        if (!results) {
+            return res.status(404).send({ message: "Not Found" })
+        }
+        res.send({ results })
+    } catch (error) {
+        res.status(500).send({ message: "Internal Error", error: error.message })
+    }
 })
 
 //Put inscriptions por id propia
 router.put("/inscriptions/id/:par", async (req, res) => {
     const par = req.params.par;
-    const results = await ModelInscription.findByIdAndUpdate(par, req.body)
-    res.send(results)
+
+    try {
+        const results = await ModelInscription.findByIdAndUpdate(par, req.body)
+        if (!results) {
+            return res.status(404).send({ message: "Not Found" })
+        }
+        res.send(results)
+    } catch (error) {
+        res.status(500).send({ message: "Internal Error", error: error.message })
+    }
 })
 
 //Delete inscriptions por id
 router.delete("/inscriptions/id/:par", async (req, res) => {
     const par = req.params.par;
-    const results = await ModelInscription.findByIdAndDelete(par)
-    res.send(results)
+
+    try {
+        const results = await ModelInscription.findByIdAndDelete(par)
+        if (!results) {
+            return res.status(404).send({ message: "Not Found" })
+        }
+        res.send(results)
+    } catch (error) {
+        res.status(500).send({ message: "Internal Error", error: error.message })
+    }
 })
 
 module.exports = router

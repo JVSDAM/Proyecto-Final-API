@@ -21,6 +21,10 @@ app.use(tournamentRoutes)
 app.use(inscriptionRoutes)
 app.use(inviteRoutes)
 
+app.use((error, req, res, next) => {
+    res.status(400)
+    console.log(error.message)
+})
 
 /*app.use(multer({dest: './uploads/',
     rename: function (fieldname, filename){
