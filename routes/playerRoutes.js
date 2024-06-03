@@ -35,7 +35,7 @@ router.get("/players/:par", async (req, res) => {
         if (!results) {
             return res.status(404).send({ message: "Not Found" })
         }
-        res.send(results)
+        res.send({ results })
     } catch (error) {
         res.status(500).send({ message: "Internal Error", error: error.message })
     }

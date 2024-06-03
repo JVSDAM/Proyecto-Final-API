@@ -45,7 +45,6 @@ router.get("/inscriptions/id/:par", async (req, res) => {
 router.get("/inscriptions/tournament/:par", async (req, res) => {
     const par = req.params.par;
 
-    res.send({ results })
     try {
         const results = await ModelInscription.find({ tournament_id: { $eq: par } })
         if (!results) {
