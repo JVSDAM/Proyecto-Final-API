@@ -26,19 +26,6 @@ app.use((error, req, res, next) => {
     console.log(error.message)
 })
 
-/*app.use(multer({dest: './uploads/',
-    rename: function (fieldname, filename){
-        return filename
-    }
-}))*/
-
-/*router.post('/players/:par/photo',function(req,res){
-    var newItem = new Item();
-    newItem.img.data = fs.readFileSync(req.files.userPhoto.path)
-    newItem.img.contentType = 'image/png';
-    newItem.save();
-});*/
-
 app.use(express.json())
 app.use(router)
 app.listen(3001, () => {

@@ -41,7 +41,7 @@ router.get("/players/:par", async (req, res) => {
     }
 })
 
-//Get teams por id
+//Get players por id
 router.get("/players/id/:par", async (req, res) => {
     const par = req.params.par
 
